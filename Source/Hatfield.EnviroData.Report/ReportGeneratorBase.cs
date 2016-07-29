@@ -26,9 +26,15 @@ namespace Hatfield.EnviroData.Report
 
         protected void ValidateData(IEnumerable<object> data)
         { 
-            if(!data.Any())
+            if(data == null || !data.Any())
             {
                 throw new NullReferenceException("No data for report generator to process.");
+            }
+
+            var firstElementType = data.First().GetType();
+            if (!data.All(x => x.GetType() == firstElementType))
+            {
+                throw new ArgumentException("Data fro report generator is not in the same type.");
             }
 
             if (!_validator.IsSupported(data))

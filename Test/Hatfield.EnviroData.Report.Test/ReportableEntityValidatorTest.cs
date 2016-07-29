@@ -25,5 +25,20 @@ namespace Hatfield.EnviroData.Report.Test
             var entityInAnotherTestInvalidClass = new AnotherTestInvalidClass();
             Assert.False(validator.IsSupported(entityInAnotherTestInvalidClass));
         }
+
+        [Test]
+        public void CollectionValidateTest()
+        {
+            var validator = new ReportableEntityValidator();
+
+            var entitiesInTestClass = new List<TestClass>{new TestClass()};
+            Assert.True(validator.IsSupported(entitiesInTestClass));
+
+            var entitiesInTestInvalidClass = new List<TestInvalidClass> { new TestInvalidClass() };
+            Assert.False(validator.IsSupported(entitiesInTestInvalidClass));
+
+            var entitiesInAnotherTestInvalidClass = new List<AnotherTestInvalidClass> { new AnotherTestInvalidClass() };
+            Assert.False(validator.IsSupported(entitiesInAnotherTestInvalidClass));
+        }
     }
 }
