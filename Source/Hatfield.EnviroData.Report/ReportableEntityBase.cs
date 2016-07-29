@@ -11,6 +11,7 @@ namespace Hatfield.EnviroData.Report
     public abstract class ReportableEntityBase
     {
         static Type stringType = typeof(string);
+        static Type dateTimeType = typeof(DateTime);
 
         public bool IsValid()
         {
@@ -28,6 +29,7 @@ namespace Hatfield.EnviroData.Report
             //if it is string or primitive type, it is valid
             //otherwise it is not valid
             return stringType.IsAssignableFrom(propertyInfo.PropertyType) ||
+                    dateTimeType.IsAssignableFrom(propertyInfo.PropertyType) ||
                     propertyInfo.PropertyType.IsPrimitive;
         }
     }
