@@ -24,4 +24,12 @@ namespace Hatfield.EnviroData.Report.Test
     {
         public TestInvalidClass Data { get; set; }
     }
+
+    public class TestReportEntity
+    {
+        public string Name { get; set; }
+        public string Gender { get; set; }
+        public int Age { get; set; }
+        public string Province { get; set; }
+    }
 }

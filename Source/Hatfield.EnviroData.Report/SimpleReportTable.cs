@@ -8,24 +8,34 @@ namespace Hatfield.EnviroData.Report
 {
     public class SimpleReportTable : IReportTable
     {
-        private object[][] rawData = null;
-
+        
         public object[][] RawData
         {
-            get { return rawData; }
+            get;
+            set;
         }
 
         public string ToHtml()
         {
-            throw new NotImplementedException();
+            var sb = new StringBuilder();
+            sb.Append("<table>");
+
+            foreach (var row in RawData)
+            {
+                sb.Append("<tr>");
+
+                var cellsHtml = String.Join("", row.Select(cell => String.Format("<td>{0}</td>", cell)));
+                sb.Append(cellsHtml);
+
+                sb.Append("</tr>");
+            }
+
+            sb.Append("</table>");
+
+            return sb.ToString();
         }
 
         public System.IO.Stream ToStream(IReportWriter reportWriter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> ToHtmlAsyn()
         {
             throw new NotImplementedException();
         }

@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColumnData.cs" />
     <Compile Include="Definition.cs" />
     <Compile Include="IReportableEntityValidator.cs" />
     <Compile Include="IReportGenerator.cs" />
@@ -47,6 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportableEntityValidator.cs" />
     <Compile Include="ReportGeneratorBase.cs" />
+    <Compile Include="SimpleReportGenerator.cs" />
     <Compile Include="SimpleReportTable.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

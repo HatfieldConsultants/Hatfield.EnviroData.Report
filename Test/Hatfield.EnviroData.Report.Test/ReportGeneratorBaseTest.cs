@@ -43,7 +43,64 @@ namespace Hatfield.EnviroData.Report.Test
             var notSameTestData = new List<object> { new TestClass(), new TestInvalidClass() };
             Assert.Throws<ArgumentException>(() => testReportGenerator.Generate(notSameTestData, testDefinition), "Data fro report generator is not in the same type.");
         }
+
+        [Test]
+        public void FlattenDataTest()
+        {
+            var validator = new ReportableEntityValidator();
+            var testDefinition = new Definition();
+            var testReportGenerator = new TestReportGenerator(validator);
+            var testData = new List<TestReportEntity> 
+            { 
+                new TestReportEntity
+                {
+                    Age = 1,
+                    Gender = "Male",
+                    Name = "Peter",
+                    Province = "B.C."
+                },
+                new TestReportEntity
+                {
+                    Age = 1,
+                    Gender = "Female",
+                    Name = "Jane",
+                    Province = "B.C."
+                },
+                new TestReportEntity
+                {
+                    Age = 2,
+                    Gender = "Male",
+                    Name = "Jack",
+                    Province = "A.B."
+                },
+                new TestReportEntity
+                {
+                    Age = 3,
+                    Gender = "Female",
+                    Name = "Sammy",
+                    Province = "O.N."
+                }
+            };
+
+            var flatternData = testReportGenerator.TestFlattenData(testData);
+
+            Assert.NotNull(flatternData);
+            Assert.AreEqual(4, flatternData.Count());
+
+            AssertColumnData(flatternData.ElementAt(0), "Name", typeof(string), new List<object> { "Peter", "Jane", "Jack", "Sammy" });
+            AssertColumnData(flatternData.ElementAt(1), "Gender", typeof(string), new List<object> { "Male", "Female", "Male", "Female" });
+            AssertColumnData(flatternData.ElementAt(2), "Age", typeof(int), new List<object> { 1, 1, 2, 3 });
+            AssertColumnData(flatternData.ElementAt(3), "Province", typeof(string), new List<object> { "B.C.", "B.C.", "A.B.", "O.N." });
+        }
+
+        private void AssertColumnData(ColumnData data, string actualName, Type actualType, IEnumerable<object> actualData)
+        {
+            Assert.AreEqual(actualName, data.Name);
+            Assert.AreEqual(actualType, data.Type);
+            Assert.AreEqual(actualData, data.Data);
+        }
     }
+
 
     public class TestReportGenerator : ReportGeneratorBase {
 
@@ -57,6 +114,11 @@ namespace Hatfield.EnviroData.Report.Test
         {
             this.ValidateData(data);
             return null;
-        } 
+        }
+
+        public IEnumerable<ColumnData> TestFlattenData(IEnumerable<object> data)
+        {
+            return this.FlattenData(data);
+        }
     }
 }

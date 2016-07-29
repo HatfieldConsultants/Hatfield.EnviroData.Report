@@ -9,11 +9,10 @@ namespace Hatfield.EnviroData.Report
 {
     public interface IReportTable
     {
-        object[][] RawData { get; }
+        object[][] RawData { get; set; }
         string ToHtml();
         Stream ToStream(IReportWriter reportWriter);
-
-        Task<string> ToHtmlAsyn();        
+ 
         Task<Stream> ToStreamAsyn(IReportWriter reportWriter);
     }
 }

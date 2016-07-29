@@ -16,13 +16,8 @@ namespace Hatfield.EnviroData.Report
             _validator = validator;
         }
 
-        public virtual IReportTable Generate(IEnumerable<object> data, Definition tableDefinition)
-        {
-            ValidateData(data);
-
-            return this.Generate(data, tableDefinition);
-
-        }
+        public abstract IReportTable Generate(IEnumerable<object> data, Definition tableDefinition);
+        
 
         protected void ValidateData(IEnumerable<object> data)
         { 
@@ -42,6 +37,20 @@ namespace Hatfield.EnviroData.Report
                 throw new NotSupportedException("Data is not supported by the report generator.");
             }
             
+        }
+
+        protected IEnumerable<ColumnData> FlattenData(IEnumerable<object> data)
+        {
+            //here assume the data is not null, all the data is validated already
+            var objectType = data.First().GetType();
+            var propertyInfos = objectType.GetProperties().Where(x => x.PropertyType.IsPublic);
+
+            var allColumnData = from propertyInfo in propertyInfos
+                                let dataOfProperty = data.Select(x => propertyInfo.GetValue(x))
+                                select new ColumnData(propertyInfo.Name, propertyInfo.PropertyType, dataOfProperty);            
+
+
+            return allColumnData;
         }
 
 
