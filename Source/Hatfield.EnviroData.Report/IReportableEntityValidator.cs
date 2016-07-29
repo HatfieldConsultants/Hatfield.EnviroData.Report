@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Hatfield.EnviroData.Report
 {
-    public interface IReportGenerator
+    public interface IReportableEntityValidator
     {
-        IReportTable Generate(IEnumerable<object> data, Definition tableDefinition);
+        bool IsSupported(object data);
+        bool IsSupported(IEnumerable<object> data);
     }
 }

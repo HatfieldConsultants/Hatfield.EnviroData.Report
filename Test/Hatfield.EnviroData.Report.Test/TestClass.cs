@@ -12,6 +12,7 @@ namespace Hatfield.EnviroData.Report.Test
         public float FloatData { get; set; }
         public string StringData { get; set; }
         public bool BooleanData { get; set; }
+        public DateTime DateTimeData { get; set; }
     }
 
     public class TestInvalidClass

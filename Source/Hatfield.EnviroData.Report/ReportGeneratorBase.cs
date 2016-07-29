@@ -9,7 +9,14 @@ namespace Hatfield.EnviroData.Report
 {
     public abstract class ReportGeneratorBase : IReportGenerator
     {
-        public virtual IReportTable Generate(IEnumerable<ReportableEntityBase> data, Definition tableDefinition)
+        protected IReportableEntityValidator _validator;
+        
+        public ReportGeneratorBase(IReportableEntityValidator validator)
+        {
+            _validator = validator;
+        }
+
+        public virtual IReportTable Generate(IEnumerable<object> data, Definition tableDefinition)
         {
             ValidateData(data);
 
@@ -17,14 +24,14 @@ namespace Hatfield.EnviroData.Report
 
         }
 
-        protected void ValidateData(IEnumerable<ReportableEntityBase> data)
+        protected void ValidateData(IEnumerable<object> data)
         { 
             if(!data.Any())
             {
                 throw new NullReferenceException("No data for report generator to process.");
             }
 
-            if(data.Any(x => !x.IsValid()))
+            if (!_validator.IsSupported(data))
             {
                 throw new NotSupportedException("Data is not supported by the report generator.");
             }
