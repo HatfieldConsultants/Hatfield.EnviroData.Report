@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace Hatfield.EnviroData.Report
 {
-    public class ColumnData
+    public class PropertyData
     {
-        public ColumnData(string name, Type type)
+        public PropertyData(string name, Type type)
         {
             Name = name;
             Type = type;
             _data = new List<object>();
         }
 
-        public ColumnData(string name, Type type, IEnumerable<object> data)
+        public PropertyData(string name, Type type, IEnumerable<object> data)
         {
             Name = name;
             Type = type;

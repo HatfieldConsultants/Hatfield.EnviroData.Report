@@ -87,13 +87,13 @@ namespace Hatfield.EnviroData.Report.Test
             Assert.NotNull(flatternData);
             Assert.AreEqual(4, flatternData.Count());
 
-            AssertColumnData(flatternData.ElementAt(0), "Name", typeof(string), new List<object> { "Peter", "Jane", "Jack", "Sammy" });
-            AssertColumnData(flatternData.ElementAt(1), "Gender", typeof(string), new List<object> { "Male", "Female", "Male", "Female" });
-            AssertColumnData(flatternData.ElementAt(2), "Age", typeof(int), new List<object> { 1, 1, 2, 3 });
-            AssertColumnData(flatternData.ElementAt(3), "Province", typeof(string), new List<object> { "B.C.", "B.C.", "A.B.", "O.N." });
+            AssertPropertyData(flatternData.ElementAt(0), "Name", typeof(string), new List<object> { "Peter", "Jane", "Jack", "Sammy" });
+            AssertPropertyData(flatternData.ElementAt(1), "Gender", typeof(string), new List<object> { "Male", "Female", "Male", "Female" });
+            AssertPropertyData(flatternData.ElementAt(2), "Age", typeof(int), new List<object> { 1, 1, 2, 3 });
+            AssertPropertyData(flatternData.ElementAt(3), "Province", typeof(string), new List<object> { "B.C.", "B.C.", "A.B.", "O.N." });
         }
 
-        private void AssertColumnData(ColumnData data, string actualName, Type actualType, IEnumerable<object> actualData)
+        private void AssertPropertyData(PropertyData data, string actualName, Type actualType, IEnumerable<object> actualData)
         {
             Assert.AreEqual(actualName, data.Name);
             Assert.AreEqual(actualType, data.Type);
@@ -116,7 +116,7 @@ namespace Hatfield.EnviroData.Report.Test
             return null;
         }
 
-        public IEnumerable<ColumnData> TestFlattenData(IEnumerable<object> data)
+        public IEnumerable<PropertyData> TestFlattenData(IEnumerable<object> data)
         {
             return this.FlattenData(data);
         }

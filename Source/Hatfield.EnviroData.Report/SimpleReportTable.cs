@@ -8,11 +8,54 @@ namespace Hatfield.EnviroData.Report
 {
     public class SimpleReportTable : IReportTable
     {
-        
+        private object[][] _rawData;
+        private IEnumerable<IReportHeader> _rowHeaders;
+        private IEnumerable<IReportHeader> _columnHeaders;
+        private ICell[][] _cells;
+
+        public SimpleReportTable(IEnumerable<IReportHeader> rowHeaders, IEnumerable<IReportHeader> columnHeaders, ICell[][] cells)
+        {
+            _rowHeaders = rowHeaders;
+            _columnHeaders = columnHeaders;
+            _cells = cells;
+        }
+
         public object[][] RawData
         {
-            get;
-            set;
+            get
+            {
+                if(_rawData == null)
+                {
+                    _rawData = CalculateRawData();
+                }
+                
+                return _rawData;
+            }
+            
+        }
+
+        public IEnumerable<IReportHeader> RowHeaders
+        {
+            get 
+            {
+                return _rowHeaders;
+            }
+        }
+
+        public IEnumerable<IReportHeader> ColumnHeaders
+        {
+            get 
+            {
+                return _columnHeaders;
+            }
+        }
+
+        public ICell[][] Cells
+        {
+            get 
+            {
+                return _cells;
+            }
         }
 
         public string ToHtml()
@@ -44,5 +87,21 @@ namespace Hatfield.EnviroData.Report
         {
             throw new NotImplementedException();
         }
+
+        private object[][] CalculateRawData()
+        {
+            var rowStartIndex = 0;
+            var currentColumnHeader = this.ColumnHeaders.First();
+            while (currentColumnHeader.SubHeaders != null && currentColumnHeader.SubHeaders.Any())
+            {
+                rowStartIndex++;
+                currentColumnHeader = currentColumnHeader.SubHeaders.First();
+            }
+
+            throw new NotImplementedException();
+        }
+
+
+        
     }
 }

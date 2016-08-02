@@ -48,6 +48,7 @@
     <Compile Include="ReportableEntityValidatorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportGeneratorBaseTest.cs" />
+    <Compile Include="SimpleReportGeneratorTest.cs" />
     <Compile Include="SimpleReportTableTest.cs" />
     <Compile Include="TestClass.cs" />
   </ItemGroup>
