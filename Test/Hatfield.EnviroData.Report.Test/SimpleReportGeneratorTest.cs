@@ -14,7 +14,49 @@ namespace Hatfield.EnviroData.Report.Test
         [Test]
         public void GenerateTest()
         {
-            var testData = new List<TestReportEntity> { };
+            var testData = new List<TestReportEntity> 
+            {
+                new TestReportEntity
+                {
+                    Age = 1,
+                    Gender = "Male",
+                    Name = "Peter",
+                    Province = "B.C."
+                },
+                new TestReportEntity
+                {
+                    Age = 1,
+                    Gender = "Female",
+                    Name = "Jane",
+                    Province = "B.C."
+                },
+                new TestReportEntity
+                {
+                    Age = 2,
+                    Gender = "Male",
+                    Name = "Jack",
+                    Province = "A.B."
+                },
+                new TestReportEntity
+                {
+                    Age = 3,
+                    Gender = "Female",
+                    Name = "Sammy",
+                    Province = "O.N."
+                }
+            };
+
+            var definition = new Definition
+            {
+                Cols = new List<string> { "Province", "Gender"},
+                Rows = new List<string> { "Name" }
+            };
+
+            var generator = new SimpleReportGenerator(new ReportableEntityValidator());
+
+            var resultTable = generator.Generate(testData, definition);
+
+            Assert.NotNull(resultTable);
         }
     }
 }

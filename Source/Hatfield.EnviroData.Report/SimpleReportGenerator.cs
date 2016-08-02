@@ -19,11 +19,11 @@ namespace Hatfield.EnviroData.Report
         {
             ValidateData(data);
 
-            var flattenData = FlattenData(data);
+            //var flattenData = FlattenData(data);
 
-            var columnHeader = CalculateColumnHeader(flattenData, tableDefinition);
-            var rowHeader = CalculateRowHeader(flattenData, tableDefinition);
-            var cells = CalculateCells(flattenData, tableDefinition);
+            var columnHeader = CalculateColumnHeader(data, tableDefinition);
+            var rowHeader = CalculateRowHeader(data, tableDefinition);
+            var cells = CalculateCells(data, tableDefinition);
 
             return new SimpleReportTable(rowHeader, columnHeader, cells);
         }
@@ -38,6 +38,9 @@ namespace Hatfield.EnviroData.Report
                 foreach(var dataGroup in dataGroups)
                 {
                     var header = new ReportHeader(columnName, new Cell(dataGroup.Key.GetType(), dataGroup.Key));
+                    headers.Add(header);
+
+                    
                 }
 
                 
@@ -64,12 +67,9 @@ namespace Hatfield.EnviroData.Report
             return results;
         }
 
-        private void AddSubHeaders(IReportHeader reportHeader, string propertyName, Dictionary<object, IEnumerable<object>> data)
-        { 
-            foreach(var key in data.Keys)
-            {
-                reportHeader.AddSubHeader(new ReportHeader(propertyName, new Cell(key.GetType(), key)));
-            }
+        private void AddSubHeaders(IReportHeader reportHeader, string propertyName, IEnumerable<object> data)
+        {
+            throw new NotImplementedException();
         }
 
         private object GetValueByProperty(object data, string propertyName)
