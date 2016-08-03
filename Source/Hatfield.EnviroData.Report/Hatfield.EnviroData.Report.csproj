@@ -52,6 +52,7 @@
     <Compile Include="ReportableEntityValidator.cs" />
     <Compile Include="ReportGeneratorBase.cs" />
     <Compile Include="ReportHeader.cs" />
+    <Compile Include="ReportTableHelper.cs" />
     <Compile Include="SimpleReportGenerator.cs" />
     <Compile Include="SimpleReportTable.cs" />
   </ItemGroup>

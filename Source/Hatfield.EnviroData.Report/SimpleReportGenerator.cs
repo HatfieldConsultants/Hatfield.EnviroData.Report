@@ -83,8 +83,8 @@ namespace Hatfield.EnviroData.Report
         private ICell[][] CalculateCells(IEnumerable<object> data, Definition tableDefinition, 
                                         IEnumerable<IReportHeader> rowHeaders, IEnumerable<IReportHeader> columnHeaders)
         {
-            var maxWidth = GetMaxDepthOfHeaders(columnHeaders);
-            var maxHeight = GetMaxDepthOfHeaders(rowHeaders);
+            var maxWidth = ReportTableHelper.GetMaxWidthOfHeaders(columnHeaders);
+            var maxHeight = ReportTableHelper.GetMaxWidthOfHeaders(rowHeaders);
 
             //initial the cells matrix
             var cells = new Cell[maxHeight][];
@@ -99,26 +99,7 @@ namespace Hatfield.EnviroData.Report
             }
 
             return cells;
-        }
-
-        private int GetMaxDepthOfHeaders(IEnumerable<IReportHeader> headers)
-        {
-            if (headers == null || !headers.Any())
-            {
-                return 0;
-            }
-
-            var height = headers.Count();
-
-            foreach(var header in headers)
-            {
-                height += GetMaxDepthOfHeaders(header.SubHeaders);
-            }
-            
-
-            return height;
-        }
-        
+        }        
 
     }
 }

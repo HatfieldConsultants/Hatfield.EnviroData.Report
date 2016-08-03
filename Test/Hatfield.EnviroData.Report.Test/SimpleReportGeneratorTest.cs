@@ -49,7 +49,7 @@ namespace Hatfield.EnviroData.Report.Test
             var definition = new Definition
             {
                 Cols = new List<string> { "Province", "Gender"},
-                Rows = new List<string> { "Name" }
+                Rows = new List<string> { "Name", "Age" }
             };
 
             var generator = new SimpleReportGenerator(new ReportableEntityValidator());
@@ -57,6 +57,8 @@ namespace Hatfield.EnviroData.Report.Test
             var resultTable = generator.Generate(testData, definition);
 
             Assert.NotNull(resultTable);
+            var html = resultTable.ToHtml();
+            Assert.NotNull(html);
         }
     }
 }

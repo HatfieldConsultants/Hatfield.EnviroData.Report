@@ -12,7 +12,7 @@ namespace Hatfield.EnviroData.Report
         ICell CellValue { get; set; }
 
         IEnumerable<IReportHeader> SubHeaders { get; set; }
-        void AddSubHeader(IReportHeader header);
+        void AddSubHeader(IReportHeader header);        
         
     }
 }
