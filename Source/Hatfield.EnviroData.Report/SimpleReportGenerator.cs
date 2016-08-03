@@ -21,61 +21,104 @@ namespace Hatfield.EnviroData.Report
 
             //var flattenData = FlattenData(data);
 
-            var columnHeader = CalculateColumnHeader(data, tableDefinition);
-            var rowHeader = CalculateRowHeader(data, tableDefinition);
-            var cells = CalculateCells(data, tableDefinition);
+            var columnHeader = CalculateHeaders(data, tableDefinition.Cols);
+            var rowHeader = CalculateHeaders(data, tableDefinition.Rows);
+            var cells = CalculateCells(data, tableDefinition, rowHeader, columnHeader);
 
             return new SimpleReportTable(rowHeader, columnHeader, cells);
         }
-
-        private IEnumerable<IReportHeader> CalculateColumnHeader(IEnumerable<object> data, Definition tableDefinition)
+        
+        private IEnumerable<IReportHeader> CalculateHeaders(IEnumerable<object> data, IEnumerable<string> names)
         {
             var headers = new List<IReportHeader>();
-            foreach(var columnName in tableDefinition.Cols)
+            var dataGroups = GroupDataByPropertyName(data, names.First());
+
+            foreach (var dataGroup in dataGroups)
             {
-                var dataGroups = GroupDataByPropertyName(data, columnName);
+                var header = new ReportHeader(names.First(), new Cell(dataGroup.Key.GetType(), dataGroup.Key));
 
-                foreach(var dataGroup in dataGroups)
-                {
-                    var header = new ReportHeader(columnName, new Cell(dataGroup.Key.GetType(), dataGroup.Key));
-                    headers.Add(header);
+                AddSubHeaders(header, names.Skip(1), dataGroup.Value);
 
-                    
-                }
-
-                
+                headers.Add(header);
             }
 
             return headers;
+
         }
 
-        private IEnumerable<IReportHeader> CalculateRowHeader(IEnumerable<object> data, Definition tableDefinition)
+        private void AddSubHeaders(IReportHeader reportHeader, IEnumerable<string> propertyNames, IEnumerable<object> data)
         {
-            throw new NotImplementedException();
-        }
+            var statck = new Stack<string>(propertyNames.ToArray());
+            
+            while(statck.Count > 0)
+            {
+                var currentPropertyName = statck.Pop();
+                var dataGroups = GroupDataByPropertyName(data, currentPropertyName);
 
-        private ICell[][] CalculateCells(IEnumerable<object> data, Definition tableDefinition)
-        {
-            throw new NotImplementedException();
+                foreach (var dataGroup in dataGroups)
+                {
+                    var header = new ReportHeader(currentPropertyName, new Cell(dataGroup.Key.GetType(), dataGroup.Key));
+                    reportHeader.AddSubHeader(header);
+
+                    AddSubHeaders(header, statck, dataGroup.Value);                    
+                } 
+            }
+            
         }
 
         private Dictionary<object, IEnumerable<object>> GroupDataByPropertyName(IEnumerable<object> dataOfProperty, string propertyName)
-        {
-            //IEnumerable<dynamic> dynamicObjects = data;
+        {            
             var groups = dataOfProperty.GroupBy(x => GetValueByProperty(x, propertyName));
             var results = groups.ToDictionary(gdc => gdc.Key, gdc => gdc.AsEnumerable());
             return results;
-        }
-
-        private void AddSubHeaders(IReportHeader reportHeader, string propertyName, IEnumerable<object> data)
-        {
-            throw new NotImplementedException();
         }
 
         private object GetValueByProperty(object data, string propertyName)
         {
             return data.GetType().GetProperty(propertyName).GetValue(data);
         }
+
+        
+
+        private ICell[][] CalculateCells(IEnumerable<object> data, Definition tableDefinition, 
+                                        IEnumerable<IReportHeader> rowHeaders, IEnumerable<IReportHeader> columnHeaders)
+        {
+            var maxWidth = GetMaxDepthOfHeaders(columnHeaders);
+            var maxHeight = GetMaxDepthOfHeaders(rowHeaders);
+
+            //initial the cells matrix
+            var cells = new Cell[maxHeight][];
+            for (var i = 0; i < maxHeight; i++)
+            {
+                cells[i] = new Cell[maxWidth];
+
+                for (var j = 0; j < maxWidth; j++)
+                {
+                    cells[i][j] = new Cell(typeof(string), "N/A");
+                }
+            }
+
+            return cells;
+        }
+
+        private int GetMaxDepthOfHeaders(IEnumerable<IReportHeader> headers)
+        {
+            if (headers == null || !headers.Any())
+            {
+                return 0;
+            }
+
+            var height = headers.Count();
+
+            foreach(var header in headers)
+            {
+                height += GetMaxDepthOfHeaders(header.SubHeaders);
+            }
+            
+
+            return height;
+        }
+        
 
     }
 }

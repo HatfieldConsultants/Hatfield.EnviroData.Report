@@ -14,6 +14,7 @@ namespace Hatfield.EnviroData.Report
         {
             PropertyName = name;
             CellValue = cellValue;
+            _subHeaders = new List<IReportHeader>();
         }
 
         public ReportHeader(string name, ICell cellValue, IEnumerable<IReportHeader> subHeaders)
