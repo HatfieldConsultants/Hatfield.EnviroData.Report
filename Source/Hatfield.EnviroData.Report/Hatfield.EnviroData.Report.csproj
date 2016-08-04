@@ -39,7 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AggregatorFactory.cs" />
+    <Compile Include="Aggregators\UniqueValueAggregator.cs" />
     <Compile Include="Cell.cs" />
+    <Compile Include="IValueAggregator.cs" />
     <Compile Include="PropertyData.cs" />
     <Compile Include="Definition.cs" />
     <Compile Include="ICell.cs" />
