@@ -96,7 +96,7 @@ namespace Hatfield.EnviroData.Report
         /// <returns></returns>
         private Dictionary<object, IEnumerable<object>> GroupDataByPropertyName(IEnumerable<object> dataOfProperty, string propertyName)
         {            
-            var groups = dataOfProperty.GroupBy(x => GetValueByProperty(x, propertyName));
+            var groups = dataOfProperty.GroupBy(x => GetValueByProperty(x, propertyName)).OrderBy(x => x.Key);
             var results = groups.ToDictionary(gdc => gdc.Key, gdc => gdc.AsEnumerable());
             return results;
         }
@@ -121,7 +121,7 @@ namespace Hatfield.EnviroData.Report
         /// <param name="rowHeaders"></param>
         /// <param name="columnHeaders"></param>
         /// <returns></returns>
-        private ICell[][] CalculateCells(IEnumerable<PropertyData> data, Definition tableDefinition, 
+        private ICell[][] CalculateCells(Dictionary<string, PropertyData> data, Definition tableDefinition, 
                                         IEnumerable<IReportHeader> rowHeaders, IEnumerable<IReportHeader> columnHeaders)
         {
             var maxWidth = ReportTableHelper.GetMaxWidthOfHeaders(columnHeaders);
@@ -136,9 +136,10 @@ namespace Hatfield.EnviroData.Report
 
                 for (var j = 0; j < maxWidth; j++)
                 {
-                    var matchingRules = DecideMatchRuleForCell(i, j, rowHeaders, columnHeaders);
-                    var cellValue = CalculateValueForCell(matchingRules, data, tableDefinition.Vals, aggregator);
-                    cells[i][j] = new Cell(cellValue.GetType(), cellValue);
+                    cells[i][j] = new Cell(typeof(string), "N/A");
+                    //var matchingRules = DecideMatchRuleForCell(i, j, rowHeaders, columnHeaders);
+                    //var cellValue = CalculateValueForCell(matchingRules, data, tableDefinition.Vals, aggregator);
+                    //cells[i][j] = new Cell(cellValue.GetType(), cellValue);
                 }
             }
 
@@ -155,7 +156,8 @@ namespace Hatfield.EnviroData.Report
         /// <param name="rowHeaders"></param>
         /// <param name="columnHeaders"></param>
         /// <returns></returns>
-        private IEnumerable<Tuple<string, object>> DecideMatchRuleForCell(int rowIndex, int columnIndex, IEnumerable<IReportHeader> rowHeaders, IEnumerable<IReportHeader> columnHeaders)
+        private IEnumerable<Tuple<string, object>> DecideMatchRuleForCell(int rowIndex, int columnIndex, 
+                                                                        IEnumerable<IReportHeader> rowHeaders, IEnumerable<IReportHeader> columnHeaders)
         {
             throw new NotImplementedException();
         
@@ -169,8 +171,8 @@ namespace Hatfield.EnviroData.Report
         /// <param name="valuePropertyNames"></param>
         /// <param name="aggregator"></param>
         /// <returns></returns>
-        private object CalculateValueForCell(IEnumerable<Tuple<string, object>> matchingRules, 
-                                            IEnumerable<PropertyData> flattenData, 
+        private object CalculateValueForCell(IEnumerable<Tuple<string, object>> matchingRules,
+                                            Dictionary<string, PropertyData> flattenData, 
                                             IEnumerable<string> valuePropertyNames, 
                                             IValueAggregator aggregator)
         {

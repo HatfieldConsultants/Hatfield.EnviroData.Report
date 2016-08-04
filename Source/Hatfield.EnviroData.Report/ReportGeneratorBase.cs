@@ -39,18 +39,18 @@ namespace Hatfield.EnviroData.Report
             
         }
 
-        protected IEnumerable<PropertyData> FlattenData(IEnumerable<object> data)
+        protected Dictionary<string, PropertyData> FlattenData(IEnumerable<object> data)
         {
             //here assume the data is not null, all the data is validated already
             var objectType = data.First().GetType();
             var propertyInfos = objectType.GetProperties().Where(x => x.PropertyType.IsPublic);
 
             var allPropertiesData = from propertyInfo in propertyInfos
-                                let dataOfProperty = data.Select(x => propertyInfo.GetValue(x))
+                                let dataOfProperty = data.Select(x => propertyInfo.GetValue(x))                                
                                 select new PropertyData(propertyInfo.Name, propertyInfo.PropertyType, dataOfProperty);            
 
 
-            return allPropertiesData;
+            return allPropertiesData.ToDictionary(mc => mc.Name, mc => mc);
         }
 
 

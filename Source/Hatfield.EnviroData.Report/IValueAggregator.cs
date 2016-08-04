@@ -8,6 +8,6 @@ namespace Hatfield.EnviroData.Report
 {
     public interface IValueAggregator
     {
-        object Calculate(IEnumerable<string> valuePropertyNames, IEnumerable<Tuple<string, object>> matchingRules, IEnumerable<PropertyData> flattenData);
+        object Calculate(IEnumerable<string> valuePropertyNames, IEnumerable<Tuple<string, object>> matchingRules, Dictionary<string, PropertyData> flattenData);
     }
 }

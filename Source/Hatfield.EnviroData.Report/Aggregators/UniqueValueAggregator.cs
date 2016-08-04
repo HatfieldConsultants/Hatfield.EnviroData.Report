@@ -8,7 +8,7 @@ namespace Hatfield.EnviroData.Report.Aggregators
 {
     public class UniqueValueAggregator : IValueAggregator
     {
-        public object Calculate(IEnumerable<string> valuePropertyNames, IEnumerable<Tuple<string, object>> matchingRules, IEnumerable<PropertyData> flattenData)
+        public object Calculate(IEnumerable<string> valuePropertyNames, IEnumerable<Tuple<string, object>> matchingRules, Dictionary<string, PropertyData> flattenData)
         {
             return "N/A";
             //throw new NotImplementedException();
