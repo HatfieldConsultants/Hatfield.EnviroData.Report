@@ -137,8 +137,7 @@ namespace Hatfield.EnviroData.Report
                 cells[i] = new Cell[maxWidth];
 
                 for (var j = 0; j < maxWidth; j++)
-                {
-                    cells[i][j] = new Cell(typeof(string), "N/A");
+                {                    
                     var matchingRules = DecideMatchRuleForCell(i, j, rowHeaders, columnHeaders);
                     var cellValue = CalculateValueForCell(matchingRules, data, tableDefinition.Vals, aggregator);
 
@@ -171,13 +170,26 @@ namespace Hatfield.EnviroData.Report
         private IEnumerable<Tuple<string, object>> DecideMatchRuleForCell(int rowIndex, int columnIndex, 
                                                                         IEnumerable<IReportHeader> rowHeaders, IEnumerable<IReportHeader> columnHeaders)
         {
-            return new List<Tuple<string, object>> { 
-                Tuple.Create<string, object>("Province", "A.B."),
-                Tuple.Create<string, object>("Gender", "Male"),
-                Tuple.Create<string, object>("Name", "Jack"),
-                Tuple.Create<string, object>("Age", 2)
-            };            
+            var rulesOfColumn = DecideMatchRules(columnIndex, columnHeaders);
+            var rulesOfRow = DecideMatchRules(rowIndex, rowHeaders);
+
+            return Enumerable.Concat(rulesOfColumn, rulesOfRow);
+
+            //return new List<Tuple<string, object>> { 
+            //    Tuple.Create<string, object>("Province", "A.B."),
+            //    Tuple.Create<string, object>("Gender", "Male"),
+            //    Tuple.Create<string, object>("Name", "Jack"),
+            //    Tuple.Create<string, object>("Age", 2)
+            //};
         
+        }
+
+        private IEnumerable<Tuple<string, object>> DecideMatchRules(int index, IEnumerable<IReportHeader> headers)
+        {
+            var rules = ReportTableHelper.GetPathByLeafIndex(headers, index)
+                                .Select(x => Tuple.Create<string, object>(x.PropertyName, x.CellValue.Value));
+
+            return rules;
         }
         
         /// <summary>

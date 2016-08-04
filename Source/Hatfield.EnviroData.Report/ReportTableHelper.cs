@@ -71,5 +71,63 @@ namespace Hatfield.EnviroData.Report
             }
         }
 
+        public static IEnumerable<IReportHeader> GetPathByLeafIndex(IEnumerable<IReportHeader> headers, int targetIndex)
+        {            
+            var counter = 0;
+            IReportHeader headerTreeThatTheIndexIn = null;
+
+            //locate the header tree
+            //to avoid start from very first node all the time
+            foreach(var header in headers)
+            {
+                var widthOfTree = ReportTableHelper.GetMaxWidthOfHeaders(new List<IReportHeader> { header });
+
+                if (targetIndex < (counter + widthOfTree))
+                {
+                    headerTreeThatTheIndexIn = header;
+                    break;
+
+                }
+                else
+                {
+                    counter = counter + widthOfTree;
+                }
+            }
+
+            var result = new Stack<IReportHeader>();
+
+            GetPathByLeafIndex(result, headerTreeThatTheIndexIn, targetIndex, counter);
+            //reverse the stack
+            return result.Reverse();
+        }
+
+        private static void GetPathByLeafIndex(Stack<IReportHeader> pathStack, IReportHeader header, int targetIndex, int startIndex)
+        {
+            throw new NotImplementedException();
+            pathStack.Push(header);
+            if (header.SubHeaders == null || !header.SubHeaders.Any())
+            {
+                if (startIndex == targetIndex)
+                {
+                    return;
+                }
+                else
+                {
+                    startIndex++;
+                    pathStack.Pop();
+                }
+
+            }
+
+            
+            foreach (var subHeader in header.SubHeaders)
+            {               
+
+                GetPathByLeafIndex(pathStack, subHeader, targetIndex, startIndex);
+            }
+            
+            
+        }
+
     }
 }
