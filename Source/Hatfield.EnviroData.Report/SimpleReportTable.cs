@@ -110,7 +110,7 @@ namespace Hatfield.EnviroData.Report
             //set headers
             SetColumnHeaders(rawData, rowWidth, _columnHeaders);
             SetRowHeaders(rawData, columnHeight, _rowHeaders);
-
+            SetCells(rawData, columnHeight + 1, rowWidth + 1, _cells);
             return rawData;
 
             
@@ -212,6 +212,17 @@ namespace Hatfield.EnviroData.Report
             }
         }
 
+
+        private void SetCells(object[][] data, int startRowIndex, int startColumnIndex, ICell[][] cellValues)
+        {
+            for (var i = 0; i < cellValues.Length; i++)
+            {
+                for (var j = 0; j < cellValues[i].Length; j++)
+                {
+                    data[i + startRowIndex][j + startColumnIndex] = cellValues[i][j].Value;
+                }
+            }
+        }
         
     }
 }
