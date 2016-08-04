@@ -48,8 +48,11 @@ namespace Hatfield.EnviroData.Report.Test
 
             var definition = new Definition
             {
-                Cols = new List<string> { "Province", "Gender"},
-                Rows = new List<string> { "Name", "Age" }
+                Cols = new List<string> { "Province", "Gender" },
+                Rows = new List<string> { "Name", "Age" },
+                Vals = new List<string> { "Age" },
+                AggregatorName = "List Unique Values",
+                RendererName = "Table"
             };
 
             var generator = new SimpleReportGenerator(new ReportableEntityValidator());

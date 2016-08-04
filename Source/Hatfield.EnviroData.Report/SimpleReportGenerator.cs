@@ -12,6 +12,8 @@ namespace Hatfield.EnviroData.Report
     /// </summary>
     public class SimpleReportGenerator : ReportGeneratorBase
     {
+        private static Type defaultEmptyCellType = typeof(string);
+
         public SimpleReportGenerator(IReportableEntityValidator validator)
             : base(validator)
         { 
@@ -137,9 +139,19 @@ namespace Hatfield.EnviroData.Report
                 for (var j = 0; j < maxWidth; j++)
                 {
                     cells[i][j] = new Cell(typeof(string), "N/A");
-                    //var matchingRules = DecideMatchRuleForCell(i, j, rowHeaders, columnHeaders);
-                    //var cellValue = CalculateValueForCell(matchingRules, data, tableDefinition.Vals, aggregator);
-                    //cells[i][j] = new Cell(cellValue.GetType(), cellValue);
+                    var matchingRules = DecideMatchRuleForCell(i, j, rowHeaders, columnHeaders);
+                    var cellValue = CalculateValueForCell(matchingRules, data, tableDefinition.Vals, aggregator);
+
+                    if(cellValue != null)
+                    {
+                        cells[i][j] = new Cell(cellValue.GetType(), cellValue);
+                    }
+                    else
+                    {
+                        cells[i][j] = new Cell(defaultEmptyCellType, string.Empty);
+
+                    }
+                    
                 }
             }
 
@@ -159,7 +171,12 @@ namespace Hatfield.EnviroData.Report
         private IEnumerable<Tuple<string, object>> DecideMatchRuleForCell(int rowIndex, int columnIndex, 
                                                                         IEnumerable<IReportHeader> rowHeaders, IEnumerable<IReportHeader> columnHeaders)
         {
-            throw new NotImplementedException();
+            return new List<Tuple<string, object>> { 
+                Tuple.Create<string, object>("Province", "A.B."),
+                Tuple.Create<string, object>("Gender", "Male"),
+                Tuple.Create<string, object>("Name", "Jack"),
+                Tuple.Create<string, object>("Age", 2)
+            };            
         
         }
         
