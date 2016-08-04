@@ -129,6 +129,13 @@ namespace Hatfield.EnviroData.Report
                 rowIndex++;
             }
 
+            foreach(var header in columnHeaders)
+            {
+                var headerValuesOfEachLevel = ReportTableHelper.GetValueOfLevels(header);
+                var widthOfHeader = headerValuesOfEachLevel.Last().Value.Count;
+            }
+            
+
 
         }
 
