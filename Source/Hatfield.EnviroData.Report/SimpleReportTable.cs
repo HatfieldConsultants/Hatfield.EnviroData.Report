@@ -116,6 +116,12 @@ namespace Hatfield.EnviroData.Report
             
         }
 
+        /// <summary>
+        /// Set the column header
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="startColumnIndex"></param>
+        /// <param name="columnHeaders"></param>
         private void SetColumnHeaders(object[][] data, int startColumnIndex, IEnumerable<IReportHeader> columnHeaders)
         {
             var rowIndex = 0;
@@ -131,6 +137,7 @@ namespace Hatfield.EnviroData.Report
             }
             
             startColumnIndex++;
+            //set value from left to right
             foreach(var header in columnHeaders)
             {
                 //rowIndex = 0;//reset the row index
@@ -159,15 +166,49 @@ namespace Hatfield.EnviroData.Report
 
         }
 
+        /// <summary>
+        /// Set the row header
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="startRowIndex"></param>
+        /// <param name="rowHeaders"></param>
         private void SetRowHeaders(object[][] data, int startRowIndex, IEnumerable<IReportHeader> rowHeaders)
         {
             var columnIndex = 0;
+            
+            //set the property name row
             var currentHeader = rowHeaders.FirstOrDefault();
             while (currentHeader != null)
             {
                 data[startRowIndex][columnIndex] = currentHeader.PropertyName;
                 currentHeader = currentHeader.SubHeaders.FirstOrDefault();
                 columnIndex++;
+            }
+
+            startRowIndex++;
+
+            //set value from top to bottom
+            foreach (var header in rowHeaders)
+            {                
+                var tempStartRowIndex = startRowIndex;
+                var headerValuesOfEachLevel = ReportTableHelper.GetValueOfLevels(header);
+                var widthOfHeader = headerValuesOfEachLevel.Last().Value.Count;
+
+                foreach (var level in headerValuesOfEachLevel)
+                {
+                    tempStartRowIndex = startRowIndex;//reset the start column index
+                    foreach (var optionValue in level.Value)
+                    {
+                        var cellLength = widthOfHeader / level.Value.Count;
+                        while (cellLength > 0)
+                        {
+                            data[tempStartRowIndex++][level.Key] = optionValue.CellValue.Value;//set value
+                            cellLength--;
+                        }
+                    }
+                }
+
+                startRowIndex = startRowIndex + widthOfHeader;//move to the next header
             }
         }
 
