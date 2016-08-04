@@ -119,20 +119,40 @@ namespace Hatfield.EnviroData.Report
         private void SetColumnHeaders(object[][] data, int startColumnIndex, IEnumerable<IReportHeader> columnHeaders)
         {
             var rowIndex = 0;
-            var columnIndex = startColumnIndex;
-
+            
             var currentHeader = columnHeaders.FirstOrDefault();
+
+            //set the property name column
             while (currentHeader != null)
             {
                 data[rowIndex][startColumnIndex] = currentHeader.PropertyName;
                 currentHeader = currentHeader.SubHeaders.FirstOrDefault();
                 rowIndex++;
             }
-
+            
+            startColumnIndex++;
             foreach(var header in columnHeaders)
             {
+                //rowIndex = 0;//reset the row index
+                var tempStartColumnIndex = startColumnIndex;
                 var headerValuesOfEachLevel = ReportTableHelper.GetValueOfLevels(header);
                 var widthOfHeader = headerValuesOfEachLevel.Last().Value.Count;
+
+                foreach(var level in headerValuesOfEachLevel)
+                {                    
+                    tempStartColumnIndex = startColumnIndex;//reset the start column index
+                    foreach(var optionValue in level.Value)
+                    {
+                        var cellLength = widthOfHeader / level.Value.Count;
+                        while(cellLength > 0)
+                        {
+                            data[level.Key][tempStartColumnIndex++] = optionValue.CellValue.Value;//set value
+                            cellLength--;
+                        }
+                    }
+                }
+
+                startColumnIndex = startColumnIndex + widthOfHeader;//move to the next header
             }
             
 
