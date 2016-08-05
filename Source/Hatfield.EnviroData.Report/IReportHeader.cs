@@ -11,6 +11,7 @@ namespace Hatfield.EnviroData.Report
         string PropertyName { get; set; }
         ICell CellValue { get; set; }
 
+        IReportHeader ParentHeader { get; set; }//make the tree node bi-direction link
         IEnumerable<IReportHeader> SubHeaders { get; set; }
         void AddSubHeader(IReportHeader header);        
         

@@ -48,9 +48,12 @@ namespace Hatfield.EnviroData.Report
             }
         }
 
+        public IReportHeader ParentHeader { get; set; }
+
         public void AddSubHeader(IReportHeader header)
         {
             _subHeaders.Add(header);
+            header.ParentHeader = this;
         }
 
 
