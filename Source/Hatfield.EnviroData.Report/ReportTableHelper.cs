@@ -95,35 +95,49 @@ namespace Hatfield.EnviroData.Report
             }
 
             var result = new Stack<IReportHeader>();
+            IReportHeader matchedHeader = null;
+            GetPathByLeafIndex(headerTreeThatTheIndexIn, targetIndex, ref counter, ref matchedHeader);
 
-            GetPathByLeafIndex(result, headerTreeThatTheIndexIn, targetIndex, counter);
+            if (matchedHeader == null)
+            {
+                throw new NullReferenceException("System fails to decide header for cell.");
+            }
+
+            var tempHeader = matchedHeader;
+            while (tempHeader != null)
+            {
+                result.Push(tempHeader);
+                tempHeader = tempHeader.ParentHeader;
+            }
             //reverse the stack
-            return result.Reverse();
+            return result;
         }
 
-        private static void GetPathByLeafIndex(Stack<IReportHeader> pathStack, IReportHeader header, int targetIndex, int startIndex)
+        private static void GetPathByLeafIndex(IReportHeader header, int targetIndex, ref int startIndex, ref IReportHeader matchedReportHeader)
         {
-            throw new NotImplementedException();
-            pathStack.Push(header);
+            if (matchedReportHeader != null)
+            {
+                return;
+            }
             if (header.SubHeaders == null || !header.SubHeaders.Any())
             {
                 if (startIndex == targetIndex)
                 {
-                    return;
+                    matchedReportHeader = header;
+                    
                 }
                 else
                 {
                     startIndex++;
-                    pathStack.Pop();
                 }
-
+                
             }
-
-            
-            foreach (var subHeader in header.SubHeaders)
-            {               
-
-                GetPathByLeafIndex(pathStack, subHeader, targetIndex, startIndex);
+            else
+            {
+                foreach (var subHeader in header.SubHeaders)
+                {
+                    GetPathByLeafIndex(subHeader, targetIndex, ref startIndex, ref matchedReportHeader);
+                }
             }
             
             
