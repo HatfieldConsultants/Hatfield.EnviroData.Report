@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{30D7E5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hatfield.EnviroData.Report.Test", "Test\Hatfield.EnviroData.Report.Test\Hatfield.EnviroData.Report.Test.csproj", "{44B08144-DD89-4862-8B90-28B8F2CC964F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hatfield.EnviroData.Report.Excel", "Source\Hatfield.EnviroData.Report.Excel\Hatfield.EnviroData.Report.Excel.csproj", "{599C291A-B979-4116-AAD0-FE5C5B398359}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,10 @@ Global
 		{44B08144-DD89-4862-8B90-28B8F2CC964F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44B08144-DD89-4862-8B90-28B8F2CC964F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44B08144-DD89-4862-8B90-28B8F2CC964F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{599C291A-B979-4116-AAD0-FE5C5B398359}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{599C291A-B979-4116-AAD0-FE5C5B398359}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{599C291A-B979-4116-AAD0-FE5C5B398359}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{599C291A-B979-4116-AAD0-FE5C5B398359}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
