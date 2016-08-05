@@ -48,6 +48,10 @@ namespace Hatfield.EnviroData.Report
         /// <returns></returns>
         private IEnumerable<IReportHeader> CalculateHeaders(IEnumerable<object> data, IEnumerable<string> names)
         {
+            if(names == null || !names.Any())
+            {
+                return null;
+            }
             var headers = new List<IReportHeader>();
             var dataGroups = GroupDataByPropertyName(data, names.First());
 
@@ -186,6 +190,10 @@ namespace Hatfield.EnviroData.Report
 
         private IEnumerable<Tuple<string, object>> DecideMatchRules(int index, IEnumerable<IReportHeader> headers)
         {
+            if(headers == null || !headers.Any())
+            {
+                return new List<Tuple<string, object>>();
+            }
             var rules = ReportTableHelper.GetPathByLeafIndex(headers, index)
                                 .Select(x => Tuple.Create<string, object>(x.PropertyName, x.CellValue.Value));
 

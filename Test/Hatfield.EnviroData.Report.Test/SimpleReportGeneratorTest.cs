@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using NUnit.Framework;
+using Hatfield.EnviroData.Report.Writers;
 
 namespace Hatfield.EnviroData.Report.Test
 {
@@ -60,7 +61,9 @@ namespace Hatfield.EnviroData.Report.Test
             var resultTable = generator.Generate(testData, definition);
 
             Assert.NotNull(resultTable);
-            var html = resultTable.ToHtml();
+
+            var htmlWriter = new HtmlWriter();
+            var html = htmlWriter.Write(resultTable);
             Assert.NotNull(html);
         }
     }

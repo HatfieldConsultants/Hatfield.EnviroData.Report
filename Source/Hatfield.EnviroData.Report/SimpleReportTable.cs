@@ -58,26 +58,6 @@ namespace Hatfield.EnviroData.Report
             }
         }
 
-        public string ToHtml()
-        {
-            var sb = new StringBuilder();
-            sb.Append("<table>");
-
-            foreach (var row in RawData)
-            {
-                sb.Append("<tr>");
-
-                var cellsHtml = String.Join("", row.Select(cell => String.Format("<td>{0}</td>", cell)));
-                sb.Append(cellsHtml);
-
-                sb.Append("</tr>");
-            }
-
-            sb.Append("</table>");
-
-            return sb.ToString();
-        }
-
         public System.IO.Stream ToStream(IReportWriter reportWriter)
         {
             throw new NotImplementedException();
@@ -108,8 +88,15 @@ namespace Hatfield.EnviroData.Report
             }
 
             //set headers
-            SetColumnHeaders(rawData, rowWidth, _columnHeaders);
-            SetRowHeaders(rawData, columnHeight, _rowHeaders);
+            if(_columnHeaders != null && _columnHeaders.Any())
+            {
+                SetColumnHeaders(rawData, rowWidth, _columnHeaders);
+            }
+            if (_rowHeaders != null && _rowHeaders.Any())
+            {
+                SetRowHeaders(rawData, columnHeight, _rowHeaders);
+            }
+            
             SetCells(rawData, columnHeight + 1, rowWidth + 1, _cells);
             return rawData;
 

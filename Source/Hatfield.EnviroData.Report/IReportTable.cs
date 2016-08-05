@@ -15,8 +15,8 @@ namespace Hatfield.EnviroData.Report
         IEnumerable<IReportHeader> ColumnHeaders { get; }
         ICell[][] Cells { get; }
 
-        string ToHtml();
-        Stream ToStream(IReportWriter reportWriter); 
-        Task<Stream> ToStreamAsyn(IReportWriter reportWriter);
+        //string ToHtml();
+        //Stream ToStream(IReportWriter reportWriter); 
+        //Task<Stream> ToStreamAsyn(IReportWriter reportWriter);
     }
 }

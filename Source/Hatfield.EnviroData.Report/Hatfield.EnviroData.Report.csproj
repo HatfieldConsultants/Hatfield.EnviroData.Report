@@ -43,6 +43,7 @@
     <Compile Include="Aggregators\UniqueValueAggregator.cs" />
     <Compile Include="Cell.cs" />
     <Compile Include="IValueAggregator.cs" />
+    <Compile Include="IWriter.cs" />
     <Compile Include="PropertyData.cs" />
     <Compile Include="Definition.cs" />
     <Compile Include="ICell.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="ReportTableHelper.cs" />
     <Compile Include="SimpleReportGenerator.cs" />
     <Compile Include="SimpleReportTable.cs" />
+    <Compile Include="Writers\HtmlWriter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
