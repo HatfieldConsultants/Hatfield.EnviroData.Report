@@ -3,21 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Reflection;
 
-namespace Hatfield.EnviroData.Report
+namespace Hatfield.EnviroData.Report.Renderers
 {
     /// <summary>
     /// Generator to genreate simple report
     /// </summary>
-    public class SimpleReportGenerator : ReportGeneratorBase
+    public class TableRenderer : ReportGeneratorBase
     {
         private static Type defaultEmptyCellType = typeof(string);
 
-        public SimpleReportGenerator(IReportableEntityValidator validator)
+        public TableRenderer(IReportableEntityValidator validator)
             : base(validator)
-        { 
-        
+        {
+
         }
 
         /// <summary>
@@ -26,7 +25,7 @@ namespace Hatfield.EnviroData.Report
         /// <param name="data"></param>
         /// <param name="tableDefinition"></param>
         /// <returns></returns>
-        public override IReportTable Generate(IEnumerable<object> data, Definition tableDefinition)
+        public override IReportTable Render(IEnumerable<object> data, Definition tableDefinition)
         {
             ValidateData(data);
 
@@ -39,7 +38,7 @@ namespace Hatfield.EnviroData.Report
 
             return new SimpleReportTable(rowHeader, columnHeader, cells);
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -48,7 +47,7 @@ namespace Hatfield.EnviroData.Report
         /// <returns></returns>
         private IEnumerable<IReportHeader> CalculateHeaders(IEnumerable<object> data, IEnumerable<string> names)
         {
-            if(names == null || !names.Any())
+            if (names == null || !names.Any())
             {
                 return null;
             }
@@ -77,8 +76,8 @@ namespace Hatfield.EnviroData.Report
         private void AddSubHeaders(IReportHeader reportHeader, IEnumerable<string> propertyNames, IEnumerable<object> data)
         {
             var statck = new Stack<string>(propertyNames.ToArray());
-            
-            while(statck.Count > 0)
+
+            while (statck.Count > 0)
             {
                 var currentPropertyName = statck.Pop();
                 var dataGroups = GroupDataByPropertyName(data, currentPropertyName);
@@ -88,10 +87,10 @@ namespace Hatfield.EnviroData.Report
                     var header = new ReportHeader(currentPropertyName, new Cell(dataGroup.Key.GetType(), dataGroup.Key));
                     reportHeader.AddSubHeader(header);
 
-                    AddSubHeaders(header, statck, dataGroup.Value);                    
-                } 
+                    AddSubHeaders(header, statck, dataGroup.Value);
+                }
             }
-            
+
         }
 
         /// <summary>
@@ -101,7 +100,7 @@ namespace Hatfield.EnviroData.Report
         /// <param name="propertyName"></param>
         /// <returns></returns>
         private Dictionary<object, IEnumerable<object>> GroupDataByPropertyName(IEnumerable<object> dataOfProperty, string propertyName)
-        {            
+        {
             var groups = dataOfProperty.GroupBy(x => GetValueByProperty(x, propertyName)).OrderBy(x => x.Key);
             var results = groups.ToDictionary(gdc => gdc.Key, gdc => gdc.AsEnumerable());
             return results;
@@ -118,7 +117,7 @@ namespace Hatfield.EnviroData.Report
             return data.GetType().GetProperty(propertyName).GetValue(data);
         }
 
-        
+
         /// <summary>
         /// Calculate value for the data cell
         /// </summary>
@@ -127,7 +126,7 @@ namespace Hatfield.EnviroData.Report
         /// <param name="rowHeaders"></param>
         /// <param name="columnHeaders"></param>
         /// <returns></returns>
-        private ICell[][] CalculateCells(Dictionary<string, PropertyData> data, Definition tableDefinition, 
+        private ICell[][] CalculateCells(Dictionary<string, PropertyData> data, Definition tableDefinition,
                                         IEnumerable<IReportHeader> rowHeaders, IEnumerable<IReportHeader> columnHeaders)
         {
             var maxWidth = ReportTableHelper.GetMaxWidthOfHeaders(columnHeaders);
@@ -141,11 +140,11 @@ namespace Hatfield.EnviroData.Report
                 cells[i] = new Cell[maxWidth];
 
                 for (var j = 0; j < maxWidth; j++)
-                {                    
+                {
                     var matchingRules = DecideMatchRuleForCell(i, j, rowHeaders, columnHeaders);
                     var cellValue = CalculateValueForCell(matchingRules, data, tableDefinition.Vals, aggregator);
 
-                    if(cellValue != null)
+                    if (cellValue != null)
                     {
                         cells[i][j] = new Cell(cellValue.GetType(), cellValue);
                     }
@@ -154,14 +153,14 @@ namespace Hatfield.EnviroData.Report
                         cells[i][j] = new Cell(defaultEmptyCellType, string.Empty);
 
                     }
-                    
+
                 }
             }
 
             return cells;
-        }        
+        }
 
-        
+
         /// <summary>
         /// decide the match rule for the data cell from the index
         /// result would be like Age: 3, Gender: Male in the tuple
@@ -171,7 +170,7 @@ namespace Hatfield.EnviroData.Report
         /// <param name="rowHeaders"></param>
         /// <param name="columnHeaders"></param>
         /// <returns></returns>
-        private IEnumerable<Tuple<string, object>> DecideMatchRuleForCell(int rowIndex, int columnIndex, 
+        private IEnumerable<Tuple<string, object>> DecideMatchRuleForCell(int rowIndex, int columnIndex,
                                                                         IEnumerable<IReportHeader> rowHeaders, IEnumerable<IReportHeader> columnHeaders)
         {
             var rulesOfColumn = DecideMatchRules(columnIndex, columnHeaders);
@@ -185,12 +184,12 @@ namespace Hatfield.EnviroData.Report
             //    Tuple.Create<string, object>("Name", "Jack"),
             //    Tuple.Create<string, object>("Age", 2)
             //};
-        
+
         }
 
         private IEnumerable<Tuple<string, object>> DecideMatchRules(int index, IEnumerable<IReportHeader> headers)
         {
-            if(headers == null || !headers.Any())
+            if (headers == null || !headers.Any())
             {
                 return new List<Tuple<string, object>>();
             }
@@ -199,7 +198,7 @@ namespace Hatfield.EnviroData.Report
 
             return rules;
         }
-        
+
         /// <summary>
         /// calculate value for cell 
         /// </summary>
@@ -209,8 +208,8 @@ namespace Hatfield.EnviroData.Report
         /// <param name="aggregator"></param>
         /// <returns></returns>
         private object CalculateValueForCell(IEnumerable<Tuple<string, object>> matchingRules,
-                                            Dictionary<string, PropertyData> flattenData, 
-                                            IEnumerable<string> valuePropertyNames, 
+                                            Dictionary<string, PropertyData> flattenData,
+                                            IEnumerable<string> valuePropertyNames,
                                             IValueAggregator aggregator)
         {
             return aggregator.Calculate(valuePropertyNames, matchingRules, flattenData);

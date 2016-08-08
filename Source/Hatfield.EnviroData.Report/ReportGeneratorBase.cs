@@ -16,7 +16,7 @@ namespace Hatfield.EnviroData.Report
             _validator = validator;
         }
 
-        public abstract IReportTable Generate(IEnumerable<object> data, Definition tableDefinition);
+        public abstract IReportTable Render(IEnumerable<object> data, Definition tableDefinition);
         
 
         protected void ValidateData(IEnumerable<object> data)

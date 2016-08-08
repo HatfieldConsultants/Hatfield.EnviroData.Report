@@ -21,7 +21,7 @@ namespace Hatfield.EnviroData.Report.Test
 
             var entitiesInTestClass = new List<TestClass> { new TestClass() };
 
-            var table = testReportGenerator.Generate(entitiesInTestClass, testDefinition);
+            var table = testReportGenerator.Render(entitiesInTestClass, testDefinition);
 
             Assert.Null(table);
         }
@@ -36,12 +36,12 @@ namespace Hatfield.EnviroData.Report.Test
 
             var entitiesInTestClass = new List<TestInvalidClass> { new TestInvalidClass() };
 
-            Assert.Throws<NotSupportedException>(() => testReportGenerator.Generate(entitiesInTestClass, testDefinition), "Data is not supported by the report generator.");
-            Assert.Throws<NullReferenceException>(() => testReportGenerator.Generate(null, testDefinition), "No data for report generator to process.");
-            Assert.Throws<NullReferenceException>(() => testReportGenerator.Generate(new List<TestClass>(), testDefinition), "No data for report generator to process.");
+            Assert.Throws<NotSupportedException>(() => testReportGenerator.Render(entitiesInTestClass, testDefinition), "Data is not supported by the report generator.");
+            Assert.Throws<NullReferenceException>(() => testReportGenerator.Render(null, testDefinition), "No data for report generator to process.");
+            Assert.Throws<NullReferenceException>(() => testReportGenerator.Render(new List<TestClass>(), testDefinition), "No data for report generator to process.");
 
             var notSameTestData = new List<object> { new TestClass(), new TestInvalidClass() };
-            Assert.Throws<ArgumentException>(() => testReportGenerator.Generate(notSameTestData, testDefinition), "Data fro report generator is not in the same type.");
+            Assert.Throws<ArgumentException>(() => testReportGenerator.Render(notSameTestData, testDefinition), "Data fro report generator is not in the same type.");
         }
 
         [Test]
@@ -110,7 +110,7 @@ namespace Hatfield.EnviroData.Report.Test
         
         }
 
-        public override IReportTable Generate(IEnumerable<object> data, Definition tableDefinition)
+        public override IReportTable Render(IEnumerable<object> data, Definition tableDefinition)
         {
             this.ValidateData(data);
             return null;

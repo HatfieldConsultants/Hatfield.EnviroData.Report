@@ -53,11 +53,11 @@
     <Compile Include="IReportTable.cs" />
     <Compile Include="IReportWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Renderers\TableRenderer.cs" />
     <Compile Include="ReportableEntityValidator.cs" />
     <Compile Include="ReportGeneratorBase.cs" />
     <Compile Include="ReportHeader.cs" />
     <Compile Include="ReportTableHelper.cs" />
-    <Compile Include="SimpleReportGenerator.cs" />
     <Compile Include="SimpleReportTable.cs" />
     <Compile Include="Writers\HtmlWriter.cs" />
   </ItemGroup>

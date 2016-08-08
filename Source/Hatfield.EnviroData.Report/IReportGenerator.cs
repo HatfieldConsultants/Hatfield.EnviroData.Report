@@ -8,6 +8,6 @@ namespace Hatfield.EnviroData.Report
 {
     public interface IReportGenerator
     {
-        IReportTable Generate(IEnumerable<object> data, Definition tableDefinition);
+        IReportTable Render(IEnumerable<object> data, Definition tableDefinition);
     }
 }

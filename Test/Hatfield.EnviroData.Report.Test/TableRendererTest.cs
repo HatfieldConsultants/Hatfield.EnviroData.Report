@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 using NUnit.Framework;
 using Hatfield.EnviroData.Report.Writers;
+using Hatfield.EnviroData.Report.Renderers;
 
 namespace Hatfield.EnviroData.Report.Test
 {
     [TestFixture]
-    public class SimpleReportGeneratorTest
+    public class TableRendererTest
     {
         [Test]
         public void GenerateTest()
@@ -56,9 +57,9 @@ namespace Hatfield.EnviroData.Report.Test
                 RendererName = "Table"
             };
 
-            var generator = new SimpleReportGenerator(new ReportableEntityValidator());
+            var renderer = new TableRenderer(new ReportableEntityValidator());
 
-            var resultTable = generator.Generate(testData, definition);
+            var resultTable = renderer.Render(testData, definition);
 
             Assert.NotNull(resultTable);
 
