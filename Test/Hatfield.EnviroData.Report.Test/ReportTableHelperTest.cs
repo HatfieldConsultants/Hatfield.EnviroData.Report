@@ -19,6 +19,51 @@ namespace Hatfield.EnviroData.Report.Test
             Assert.AreEqual(expectedDepth, ReportTableHelper.GetMaxDepthOfHeaders(testHeaders));
         }
 
+        [Test]
+        [TestCaseSource("maxWidthTestCases")]
+        public void GetMaxWidthOfHeadersTest(IEnumerable<IReportHeader> testHeaders, int expectedWidth)
+        {
+            Assert.AreEqual(expectedWidth, ReportTableHelper.GetMaxWidthOfHeaders(testHeaders));
+        }
+
+        [Test]        
+        public void GetValueOfLevelsTest()
+        {
+            var testArray = new List<IEnumerable<IReportHeader>> { testHeader0, testHeader1, testHeader2, testHeader3 };
+
+            foreach(var element in testArray)
+            {
+                var actualValues = ReportTableHelper.GetValueOfLevels(element.FirstOrDefault());
+
+                foreach (var key in actualValues.Keys)
+                {
+                    var values = actualValues[key];
+                    Assert.AreEqual(1, values.Count);
+                    Assert.AreEqual("header" + key.ToString(), values.First().CellValue.Value);
+                }
+            }
+            
+        }
+
+        [Test]
+        public void GetPathByLeafIndexTest()
+        {
+            var testHeader = new ReportHeader("Name", new Cell(typeof(string), "header0"));
+            var subHeaderInLevel1 = new ReportHeader("Name", new Cell(typeof(string), "header1"));
+            var subHeaderInLevel2 = new ReportHeader("Name", new Cell(typeof(string), "header2"));
+
+            testHeader.AddSubHeader(subHeaderInLevel1);
+            subHeaderInLevel1.AddSubHeader(subHeaderInLevel2);
+
+            var actualPath = ReportTableHelper.GetPathByLeafIndex(new List<IReportHeader>{ testHeader }, 0);
+
+            Assert.AreEqual(3, actualPath.Count());
+            for (var i = 0; i < actualPath.Count(); i++)
+            {
+                Assert.AreEqual("header" + i.ToString(), actualPath.ElementAt(i).CellValue.Value);
+            }
+        }
+
         static IEnumerable<IReportHeader> testHeader0 = new List<IReportHeader> { 
                     new ReportHeader("Name", new Cell(typeof(string), "header0"))
         };
@@ -69,6 +114,33 @@ namespace Hatfield.EnviroData.Report.Test
             new object[] {
                 testHeader3,
                 3
+            }
+        };
+
+        static object[] maxWidthTestCases = new object[] { 
+            new object[] {
+                null,
+                1
+            },
+            new object[] {
+                new List<IReportHeader>(),
+                1
+            },
+            new object[] {
+                testHeader0,
+                1
+            },
+            new object[] {
+                testHeader1,
+                1
+            },
+            new object[] {
+                testHeader2,
+                1
+            },
+            new object[] {
+                testHeader3,
+                1
             }
         };
     }

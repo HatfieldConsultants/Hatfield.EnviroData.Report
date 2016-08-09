@@ -8,6 +8,11 @@ namespace Hatfield.EnviroData.Report
 {
     public static class ReportTableHelper
     {
+        /// <summary>
+        /// Get the max width of the header
+        /// </summary>
+        /// <param name="headers"></param>
+        /// <returns></returns>
         public static int GetMaxWidthOfHeaders(IEnumerable<IReportHeader> headers)
         {
             if (headers == null || !headers.Any())
@@ -26,6 +31,11 @@ namespace Hatfield.EnviroData.Report
             return height;
         }
 
+        /// <summary>
+        /// get max depth among the header trees
+        /// </summary>
+        /// <param name="headers"></param>
+        /// <returns></returns>
         public static int GetMaxDepthOfHeaders(IEnumerable<IReportHeader> headers)
         {
             var depth = 0;
@@ -39,6 +49,11 @@ namespace Hatfield.EnviroData.Report
             return depth;
         }
 
+        /// <summary>
+        /// Get values of each level
+        /// </summary>
+        /// <param name="header"></param>
+        /// <returns></returns>
         public static Dictionary<int, List<IReportHeader>> GetValueOfLevels(IReportHeader header)
         {
             var values = new Dictionary<int, List<IReportHeader>>();
@@ -55,6 +70,13 @@ namespace Hatfield.EnviroData.Report
             
         }
 
+        /// <summary>
+        /// get the path to a node by index
+        /// index is decides by post-order traversal
+        /// </summary>
+        /// <param name="headers"></param>
+        /// <param name="targetIndex"></param>
+        /// <returns></returns>
         public static IEnumerable<IReportHeader> GetPathByLeafIndex(IEnumerable<IReportHeader> headers, int targetIndex)
         {
             var counter = 0;
@@ -78,6 +100,11 @@ namespace Hatfield.EnviroData.Report
                 }
             }
 
+            if(headerTreeThatTheIndexIn == null)
+            {
+                throw new IndexOutOfRangeException("Header contains less leaf nodes than the reuqest index.");
+            }
+
             var result = new Stack<IReportHeader>();
             IReportHeader matchedHeader = null;
             GetPathByLeafIndex(headerTreeThatTheIndexIn, targetIndex, ref counter, ref matchedHeader);
@@ -97,6 +124,13 @@ namespace Hatfield.EnviroData.Report
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="header"></param>
+        /// <param name="currentLevel"></param>
+        /// <param name="requestLevel"></param>
+        /// <param name="result"></param>
         private static void GetValueOfParticularLevel(IReportHeader header, int currentLevel, int requestLevel, List<IReportHeader> result)
         { 
             var levelIndex = currentLevel;
@@ -114,7 +148,13 @@ namespace Hatfield.EnviroData.Report
         }
 
         
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="header"></param>
+        /// <param name="targetIndex"></param>
+        /// <param name="startIndex"></param>
+        /// <param name="matchedReportHeader"></param>
         private static void GetPathByLeafIndex(IReportHeader header, int targetIndex, ref int startIndex, ref IReportHeader matchedReportHeader)
         {
             if (matchedReportHeader != null)
