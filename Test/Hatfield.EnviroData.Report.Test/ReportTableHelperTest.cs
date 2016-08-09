@@ -10,40 +10,30 @@ namespace Hatfield.EnviroData.Report.Test
 {
     [TestFixture]
     public class ReportTableHelperTest
-    {
-        static object[] reportHeaderTestCases = new object[] { 
-            new object[] {
-                null,
-                0
-            },
-            new object[] {
-                new List<IReportHeader>(),
-                0
-            },
-            new object[] {
-                new List<IReportHeader> { 
+    {   
+
+        [Test]
+        [TestCaseSource("maxDepthTestCases")]
+        public void GetMaxDepthOfHeadersTest(IEnumerable<IReportHeader> testHeaders, int expectedDepth)
+        {
+            Assert.AreEqual(expectedDepth, ReportTableHelper.GetMaxDepthOfHeaders(testHeaders));
+        }
+
+        static IEnumerable<IReportHeader> testHeader0 = new List<IReportHeader> { 
                     new ReportHeader("Name", new Cell(typeof(string), "header0"))
-                },
-                1
-            },
-            new object[] {
-                new List<IReportHeader> { 
+        };
+
+        static IEnumerable<IReportHeader> testHeader1 = new List<IReportHeader> { 
                     new ReportHeader("Name", new Cell(typeof(string), "header0"), new List<IReportHeader>{})
-                },
-                1
-            },
-            new object[] {
-                new List<IReportHeader> { 
+                };
+        static IEnumerable<IReportHeader> testHeader2 = new List<IReportHeader> { 
                     new ReportHeader("Name", 
                                     new Cell(typeof(string), "header0"), 
                                     new List<IReportHeader>{
                                         new ReportHeader("Gender", new Cell(typeof(string), "header1"))
                                     })
-                },
-                2
-            },
-            new object[] {
-                new List<IReportHeader> { 
+                };
+        static IEnumerable<IReportHeader> testHeader3 = new List<IReportHeader> { 
                     new ReportHeader("Name", 
                                     new Cell(typeof(string), "header0"), 
                                     new List<IReportHeader>{
@@ -53,16 +43,33 @@ namespace Hatfield.EnviroData.Report.Test
                                                             new ReportHeader("Name", new Cell(typeof(string), "header2"))
                                                         })
                                     })
-                },
+                };
+
+        static object[] maxDepthTestCases = new object[] { 
+            new object[] {
+                null,
+                0
+            },
+            new object[] {
+                new List<IReportHeader>(),
+                0
+            },
+            new object[] {
+                testHeader0,
+                1
+            },
+            new object[] {
+                testHeader1,
+                1
+            },
+            new object[] {
+                testHeader2,
+                2
+            },
+            new object[] {
+                testHeader3,
                 3
             }
         };
-
-        [Test]
-        [TestCaseSource("reportHeaderTestCases")]
-        public void GetMaxDepthOfHeadersTest(IEnumerable<IReportHeader> testHeaders, int expectedDepth)
-        {
-            Assert.AreEqual(expectedDepth, ReportTableHelper.GetMaxDepthOfHeaders(testHeaders));
-        }
     }
 }

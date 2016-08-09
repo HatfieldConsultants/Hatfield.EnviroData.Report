@@ -55,30 +55,14 @@ namespace Hatfield.EnviroData.Report
             
         }
 
-        private static void GetValueOfParticularLevel(IReportHeader header, int currentLevel, int requestLevel, List<IReportHeader> result)
-        { 
-            var levelIndex = currentLevel;
-            if(levelIndex == requestLevel)
-            {
-                result.Add(header);
-            }
-
-            levelIndex++;
-
-            foreach(var subHeader in header.SubHeaders)
-            {
-                GetValueOfParticularLevel(subHeader, levelIndex, requestLevel, result);
-            }
-        }
-
         public static IEnumerable<IReportHeader> GetPathByLeafIndex(IEnumerable<IReportHeader> headers, int targetIndex)
-        {            
+        {
             var counter = 0;
             IReportHeader headerTreeThatTheIndexIn = null;
 
             //locate the header tree
             //to avoid start from very first node all the time
-            foreach(var header in headers)
+            foreach (var header in headers)
             {
                 var widthOfTree = ReportTableHelper.GetMaxWidthOfHeaders(new List<IReportHeader> { header });
 
@@ -109,9 +93,27 @@ namespace Hatfield.EnviroData.Report
                 result.Push(tempHeader);
                 tempHeader = tempHeader.ParentHeader;
             }
-            //reverse the stack
+
             return result;
         }
+
+        private static void GetValueOfParticularLevel(IReportHeader header, int currentLevel, int requestLevel, List<IReportHeader> result)
+        { 
+            var levelIndex = currentLevel;
+            if(levelIndex == requestLevel)
+            {
+                result.Add(header);
+            }
+
+            levelIndex++;
+
+            foreach(var subHeader in header.SubHeaders)
+            {
+                GetValueOfParticularLevel(subHeader, levelIndex, requestLevel, result);
+            }
+        }
+
+        
 
         private static void GetPathByLeafIndex(IReportHeader header, int targetIndex, ref int startIndex, ref IReportHeader matchedReportHeader)
         {
