@@ -51,6 +51,7 @@
     <Compile Include="ReportTableHelperTest.cs" />
     <Compile Include="TableRendererTest.cs" />
     <Compile Include="TestClass.cs" />
+    <Compile Include="UniqueValueAggregatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Source\Hatfield.EnviroData.Report\Hatfield.EnviroData.Report.csproj">

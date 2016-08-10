@@ -53,6 +53,11 @@ namespace Hatfield.EnviroData.Report.Aggregators
                 }
             }
 
+            if(!matchIndexesOfProperties.Any())
+            {
+                throw new IndexOutOfRangeException("System can not decide index from the matching rule");
+            }
+
             var intersection = matchIndexesOfProperties
                                     .Skip(1)
                                     .Aggregate(
